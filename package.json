@@ -1,0 +1,32 @@
+{
+  "name": "real-time-web-1819",
+  "version": "1.0.0",
+  "description": "During this course you will learn how to build a **meaningful** real-time application. You will learn techniques to setup an open connection between the client and the server. This will enable you to send data in real-time both ways, at the same time.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "eslint": "eslint src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jesperingels/real-time-web-1819.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jesperingels/real-time-web-1819/issues"
+  },
+  "homepage": "https://github.com/jesperingels/real-time-web-1819#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "node-fetch": "^2.3.0",
+    "nodemon": "^1.18.11",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}
