@@ -9,8 +9,6 @@
         e.preventDefault();
         socket.emit('query', query);
 
-        fetch();
-
         input.value = "";
     });
 
@@ -29,14 +27,37 @@
         });
     });
 
-    socket.on("giphy init",(e)=>{
-        console.log(e);
-        e.forEach(el=>{
-            let newImg = document.createElement("img");
-            newImg.src = el.original.url;
-            document.querySelector("#messages").appendChild(newImg)
-        })
-    })
+    socket.on("giphy init",(obj)=>{
+        console.log(obj);
+        console.log(obj[1]);
+        console.log(obj.length);
+
+        let newImg = document.createElement("img");
+        let newListItem = document.createElement('li');
+        let username = document.createElement('h3');
+
+        username.innerText = localStorage.getItem('username');
+        newImg.src = obj.original.url;
+        document.querySelector("#messages").appendChild(newListItem);
+        newListItem.appendChild(username);
+        newListItem.appendChild(newImg);
+        updateScroll();
+    });
+
+    const updateScroll = () => {
+        // const body = document.body;
+        document.body.scrollTop = document.body.scrollHeight;
+    };
+
+    if(document.getElementById('login')) {
+        localStorage.clear();
+        const form = document.querySelector('form');
+        const input = document.querySelector('.usernameInput');
+        form.addEventListener('submit', () => {
+            localStorage.setItem('username', input.value);
+        });
+    }
+
 
 
 })();
