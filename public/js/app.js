@@ -28,7 +28,7 @@
     //     });
     // });
 
-    socket.on("giphy init",(obj)=>{
+    socket.on("giphy init", async (obj)=>{
         console.log(obj);
         console.log(obj[1]);
         console.log(obj.length);
@@ -38,7 +38,7 @@
         let username = document.createElement('h3');
 
         username.innerText = obj[1];
-        newImg.src = obj[0].original.url;
+        newImg.src = await obj[0].original.url;
         document.querySelector("#messages").appendChild(newListItem);
         newListItem.appendChild(username);
         newListItem.appendChild(newImg);

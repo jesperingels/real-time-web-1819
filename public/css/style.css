@@ -12,6 +12,10 @@ html, body {
     font: 13px Helvetica, Arial;
 }
 
+ul li, ul {
+    list-style: none;
+}
+
 form {
     background: #000;
     padding: 3px;

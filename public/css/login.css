@@ -1,0 +1,13 @@
+ul li, ul {
+    list-style: none;
+}
+
+input {
+    width: 200px;
+    height: 30px;
+}
+
+body {
+    background-color: #d8d8d8;
+    font-family: sans-serif;
+}
