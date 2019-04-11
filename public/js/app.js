@@ -5,27 +5,28 @@
     const output = document.getElementById('messages');
 
     form.addEventListener('submit', function(e) {
-        const query = input.value;
+        const username = localStorage.getItem('username');
+        const query = [input.value, username];
         e.preventDefault();
         socket.emit('query', query);
 
         input.value = "";
     });
 
-    socket.on('query', (msg) => {
-
-        console.log('message', msg);
-
-        msg.data.forEach((prop)=>{
-            console.log(prop.url);
-
-            const img = document.createElement('img');
-            console.log(img);
-            img.src = prop.url;
-            const outputHTML = document.createElement('li');
-            outputHTML.appendChild(img);
-        });
-    });
+    // socket.on('query', (msg) => {
+    //
+    //     console.log('message', msg);
+    //
+    //     msg.data.forEach((prop)=>{
+    //         console.log(prop.url);
+    //
+    //         const img = document.createElement('img');
+    //         console.log(img);
+    //         img.src = prop.url;
+    //         const outputHTML = document.createElement('li');
+    //         outputHTML.appendChild(img);
+    //     });
+    // });
 
     socket.on("giphy init",(obj)=>{
         console.log(obj);
@@ -36,8 +37,8 @@
         let newListItem = document.createElement('li');
         let username = document.createElement('h3');
 
-        username.innerText = localStorage.getItem('username');
-        newImg.src = obj.original.url;
+        username.innerText = obj[1];
+        newImg.src = obj[0].original.url;
         document.querySelector("#messages").appendChild(newListItem);
         newListItem.appendChild(username);
         newListItem.appendChild(newImg);
@@ -55,6 +56,7 @@
         const input = document.querySelector('.usernameInput');
         form.addEventListener('submit', () => {
             localStorage.setItem('username', input.value);
+            // socket.emit('name', username);
         });
     }
 

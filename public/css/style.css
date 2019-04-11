@@ -49,6 +49,10 @@ h3 {
     display: flex;
 }
 
+#messages li:last-child {
+    padding-bottom: 50px;
+}
+
 #messages li:nth-child(odd) {
     background: #eee;
 }

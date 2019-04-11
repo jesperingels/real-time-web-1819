@@ -1,7 +1,7 @@
 const express = require('express');
 require('ejs');
 const app = express();
-var rp = require('request-promise');
+const rp = require('request-promise');
 const http = require('http').Server(app);
 const request = require('request');
 const io = require('socket.io')(http);
@@ -22,33 +22,43 @@ app.post('/', function(req, res) {
     res.render('pages/index.ejs');
 });
 
-app.get('/chat', function(req, res) {
-    res.render('pages/index.ejs');
-});
-
 io.on('connection', socket => {
     console.log('a user connected');
 
     socket.on('query', (msg) => {
+        const chatMsg = msg[0];
+        const username = msg[1];
 
-        request(options(msg),callback);
+        // console.log(name);
 
-        function callback(error, response, body) {
-            if (!error && response.statusCode === 200) {
-                const info = JSON.parse(body);
+        // request(options(chatMsg),callback);
 
-                let gifs = info.data.map(el => el.images);
-                console.log('test ' + gifs[randomInt(gifs.length)]);
-                if(gifs.length === 0){
+        rp(options(chatMsg))
+            .then(res => callback(res))
+            .catch(function (err) {
+                console.log(err);
+            });
+
+        function callback(res) {
+            // if (!error && res.statusCode === 200) {
+                const info = JSON.parse(res);
+
+                const gifs = info.data.map(el => el.images);
+                const data = [gifs[randomInt(gifs.length)], username];
+                // console.log('test ' + gifs[randomInt(gifs.length)]);
+                if(data.length === 0) {
                     request(options("stupid"),callback)
-                }else{
-                    io.emit("giphy init", gifs[randomInt(gifs.length)])
+                } else{
+                    io.emit("giphy init", data)
                 }
-            }
+            // }
         }
 
-        // io.emit('query', msg);
     });
+
+
+
+
 });
 
 const options = (msg)=>{
