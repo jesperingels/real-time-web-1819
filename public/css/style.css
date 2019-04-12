@@ -16,6 +16,15 @@ ul li, ul {
     list-style: none;
 }
 
+.log-wrapper {
+    min-height: 50px;
+    width: 250px;
+    border: 1px solid black;
+    position: fixed;
+    right: 0;
+    bottom: 55px;
+}
+
 form {
     background: #000;
     padding: 3px;

@@ -7,32 +7,62 @@ const request = require('request');
 const io = require('socket.io')(http);
 const randomInt = require('random-int');
 const port = process.env.PORT || 3001;
-const fetch = require('node-fetch');
+const bodyParser = require('body-parser');
+
 
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 
 app.get('/', function(req, res) {
     res.render('pages/login.ejs');
 });
 
+let onlineUsers = [];
+
 app.post('/', function(req, res) {
+
+    console.log('form sent');
+
+    io.on('connection', socket => {
+        let thisUser = req.body.user;
+        console.log('a user connected');
+
+        if(onlineUsers.includes(thisUser)) {
+            console.log('user exists')
+        } else {
+            onlineUsers.push(thisUser);
+        }
+        console.log('online users= ' + onlineUsers);
+        io.emit("user connect", onlineUsers);
+
+
+        socket.on("disconnect",() => {
+            console.log(thisUser + " disconnected");
+
+            for( let i = 0; i < onlineUsers.length; i++){
+                if ( onlineUsers[i] === thisUser) {
+                    onlineUsers.splice(i, 1);
+                }
+            }
+
+            io.emit("user disconnect", onlineUsers);
+        });
+    });
+
     res.render('pages/index.ejs');
 });
 
 io.on('connection', socket => {
-    console.log('a user connected');
 
     socket.on('query', (msg) => {
         const chatMsg = msg[0];
         const username = msg[1];
 
-        // console.log(name);
-
-        // request(options(chatMsg),callback);
-
+        // API call with headers
         rp(options(chatMsg))
             .then(res => callback(res))
             .catch(function (err) {
@@ -40,26 +70,17 @@ io.on('connection', socket => {
             });
 
         function callback(res) {
-            // if (!error && res.statusCode === 200) {
-                const info = JSON.parse(res);
+            const info = JSON.parse(res);
 
-                const gifs = info.data.map(el => el.images);
-                const data = [gifs[randomInt(gifs.length)], username];
-                // console.log('test ' + gifs[randomInt(gifs.length)]);
-                if(data.length === 0) {
-                    request(options("stupid"),callback)
-                } else{
-                    io.emit("giphy init", data)
-                }
-            // }
+            const gifs = info.data.map(el => el.images);
+            const data = [gifs[randomInt(gifs.length)], username];
+
+            io.emit("giphy init", data)
         }
 
     });
-
-
-
-
 });
+
 
 const options = (msg)=>{
         return {
