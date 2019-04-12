@@ -73,7 +73,7 @@ io.on('connection', socket => {
             const info = JSON.parse(res);
 
             const gifs = info.data.map(el => el.images);
-            const data = [gifs[randomInt(gifs.length)], username];
+            const data = [gifs[randomInt(gifs.length-1)], username];
 
             io.emit("giphy init", data)
         }
