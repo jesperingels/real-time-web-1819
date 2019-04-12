@@ -66,10 +66,7 @@
     });
 
     // Chat section
-    socket.on("giphy init", async (obj)=>{
-
-        console.log(obj);
-        // console.log(typeof obj[0].original.url);
+    socket.on("giphy init", async (obj) => {
 
         let newImg = document.createElement("img");
         let newListItem = document.createElement('li');
@@ -79,6 +76,7 @@
             username.innerText = obj[1];
             newImg.src = await obj[0].original.url;
         } else {
+            username.innerText = obj[1];
             newImg.src = 'https://media.giphy.com/media/xT9IgFWN8DXgWvqvBK/giphy.gif';
         }
 
