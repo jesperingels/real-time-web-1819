@@ -1,8 +1,6 @@
 # Real-Time Web @cmda-minor-web · 2018-2019
 
 
-> If you're seeing this message on a forked repo, it means one of our students hasn't changed the description yet 😈
-
 <!-- Add a link to your live demo in Github Pages 🌐-->
 
 <!-- ☝️ replace this description with a description of your own work -->
