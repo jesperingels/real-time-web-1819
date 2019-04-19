@@ -1,4 +1,4 @@
-quiz = [
+const quiz = [
     {
         question: 'Op de albumhoes van welk album van de Red Hot Chili Peppers zit een meisje achter de piano?',
         rightAnswer: 'One Hot Minute',
@@ -78,6 +78,7 @@ quiz = [
         incorrect2: '1960',
         incorrect3: '1964'
     }
-
-
 ];
+
+
+module.exports = quiz;

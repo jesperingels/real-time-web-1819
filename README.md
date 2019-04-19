@@ -91,7 +91,21 @@ quiz = [
         incorrect3: '1964'
     }
 ];
+
+module.exports = quiz;
 ```
+
+in mijn index.js komt de database binnen en toon ik de data bij een get request met de url: `/api/v1/quiz`:
+```javascript
+const db = require('../public/db.js');
+
+app.get('/api/v1/quiz', (req, res) => {
+    res.status(200).send({
+        db: db
+    })
+});
+```
+
 
 
 
