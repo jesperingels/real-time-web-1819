@@ -1,5 +1,11 @@
 # Real-Time Web @cmda-minor-web · 2018-2019
 
+## Concept
+**De slimste stad van Nederland:** Meerdere mensen verbinden met de webapp. Hun locatie wordt in een overzicht getoond.
+Bijvoorbeeld: Amsterdam, Utrecht, Rotterdam. De mensen uit deze drie steden gaan enkele quizvragen beantwoorden en kunnen 
+zien wie de slimste stad van Nederland is. De muispositie van elke client wordt op real-time op de server opgeslagen
+ook de locatie van de client wordt op de server real-time opgeslagen. Degene die als eerste op het juiste antwoord klikt 
+heeft gewonnen en scoort een punt voor zijn/haar stad. De vragen worden opgehaald uit 
 
 <!-- Add a link to your live demo in Github Pages 🌐-->
 
