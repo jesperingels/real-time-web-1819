@@ -8,7 +8,7 @@ ook de locatie van de client wordt op de server real-time opgeslagen. Degene die
 heeft gewonnen en scoort een punt voor zijn/haar stad. De vragen worden opgehaald uit een API die ik zelf aanmaak in Express.js
 
 ## API
-Zo wordt is de data opgeslagen in mijn `db.js` file:
+Zo is de data opgeslagen in mijn `db.js` file:
 ```javascript
 quiz = [
     {
@@ -107,6 +107,9 @@ app.get('/api/v1/quiz', (req, res) => {
 ```
 ## Data Life Cycle
 ![data life cycle](public/img/DataLifeCycle.jpg)
+
+## Interaction Diagram
+![interaction diagram](public/img/interactionDiagram.jpg)
 
 
 
