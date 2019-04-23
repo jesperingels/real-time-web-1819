@@ -105,7 +105,8 @@ app.get('/api/v1/quiz', (req, res) => {
     })
 });
 ```
-
+## Data Life Cycle
+![data life cycle](public/img/DataLifeCycle.jpg)
 
 
 

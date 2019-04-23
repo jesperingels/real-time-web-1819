@@ -22,7 +22,6 @@ app.get('/api/v1/quiz', (req, res) => {
     })
 });
 
-
 http.listen(port, () => console.log('App listening on port: ' + port ));
 
 
