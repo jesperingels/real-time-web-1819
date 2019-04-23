@@ -28,50 +28,52 @@ app.get('/', (req, res) => {
     res.render('pages/register.ejs');
 });
 
-app.post('/', (req, res) => {
-    console.log('form sent');
 
-    // on user connected
-    io.on('connection', socket => {
-        let thisUser = req.body.user;
-        console.log('a user connected');
+// on user connected
+io.on('connection', socket => {
 
-        if(onlineUsers.includes(thisUser)) {
+    socket.on('newUser', user => {
+        console.log(user);
+        if(onlineUsers.includes(user)) {
             console.log('user exists')
         } else {
-            onlineUsers.push(thisUser);
+            onlineUsers.push(user);
         }
-        console.log(onlineUsers.length + onlineUsers);
+
         io.emit("user connect", onlineUsers);
-
-        // on user disconnect
-        socket.on("disconnect",() => {
-            console.log(thisUser + " disconnected");
-
-            for( let i = 0; i < onlineUsers.length; i++){
-                if ( onlineUsers[i] === thisUser) {
-                    onlineUsers.splice(i, 1);
-                }
-            }
-
-            io.emit("user disconnect", onlineUsers);
-        });
-
-        if(onlineUsers.length === 2) {
-
-            rp(options())
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
-
-            io.emit('start quiz');
-        }
 
     });
 
+    // on user disconnect
+    socket.on("disconnect",(thisUser) => {
+        console.log(thisUser + " disconnected");
+
+        for( let i = 0; i < onlineUsers.length; i++){
+            if ( onlineUsers[i] === thisUser) {
+                onlineUsers.splice(i, 1);
+            }
+        }
+
+        io.emit("user disconnect", onlineUsers);
+    });
+
+    if(onlineUsers.length === 2) {
+
+        rp(options())
+            .then(res => {
+                const data = JSON.parse(res);
+                console.log(data);
+                io.emit('start quiz', data.db);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    }
+
+});
+
+
+app.get('/lobby', (req,res) =>{
     res.render('pages/lobby.ejs');
 });
 
@@ -83,7 +85,7 @@ app.get('/quiz', (req, res) => {
 
 const options = () => {
     return {
-        url:`localhost:3008/api/v1/quiz`,
+        url:`https://slimste-stad-van-nederland.herokuapp.com/api/v1/quiz`,
     }};
 
 
