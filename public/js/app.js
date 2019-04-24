@@ -5,22 +5,30 @@
     const input = document.getElementById('username');
 
     let onlineUsers = [];
+    console.log(onlineUsers);
 
     if (form) {
-        form.addEventListener('submit', e => {
+        form.addEventListener('submit', function(e) {
+
+            const query = input.value;
             e.preventDefault();
-            socket.emit('newUser', input.value);
-            window.location.replace('/lobby')
+            socket.emit('query', query);
+            input.value = "";
+            window.location.href = '/lobby';
         });
     }
 
 
 
     socket.on('user connect', (name) => {
+        console.log('je ziet mij!');
+        console.log(name);
         if (log) {
             while (log.firstChild) {
                 log.removeChild(log.firstChild);
             }
+
+            console.log('naam'+name);
 
             name.forEach((item) => {
 
@@ -30,8 +38,7 @@
 
             });
 
-            console.log(name);
-            console.log(onlineUsers);
+
         }
 
     });
