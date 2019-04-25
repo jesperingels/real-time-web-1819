@@ -2,6 +2,8 @@
     const socket = io();
     const log = document.querySelector('.log');
     const form = document.querySelector('.form');
+    const lobby = document.getElementById('lobby');
+    const quiz = document.getElementById('quiz');
     const input = document.getElementById('username');
 
     let onlineUsers = [];
@@ -31,12 +33,16 @@
         console.log('user connected!');
         console.log(name);
 
+        form.style.display = 'none';
+        lobby.style.display = 'block';
+
+
         // clear all HTML in the log
         if (log) {
             while (log.firstChild) {
                 log.removeChild(log.firstChild);
             }
-            console.log('naam'+name);
+            console.log('naam ' + name);
 
             // Check if there are no users connected
             if(name.length === 0) {

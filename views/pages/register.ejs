@@ -8,13 +8,32 @@
 </head>
 <body>
 
-<form class="form" action="/lobby">
+<form class="form" action="/">
     <label class="title">
         <h2>Wat is uw naam?</h2>
     </label>
     <input name="user" class="usernameInput" id="username" type="text" maxlength="14">
     <button type="submit">Registreer</button>
 </form>
+
+<div id="lobby">
+    <h1 id="question">Welkom bij de slimste stad van Nederland!</h1>
+
+    <h2 id="subtitle">Gebruikers in deze lobby:</h2>
+    <ul class="log">
+
+    </ul>
+</div>
+
+<div id="quiz">
+    <ul class="answers">
+        <li class="listItem"></li>
+        <li class="listItem"></li>
+        <li class="listItem"></li>
+        <li class="listItem"></li>
+    </ul>
+</div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/app.js"></script>
