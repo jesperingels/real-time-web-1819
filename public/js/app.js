@@ -1,189 +1,119 @@
 (() => {
-    const socket = io();
-    const log = document.querySelector('.log');
-    const form = document.querySelector('.form');
-    const lobby = document.getElementById('lobby');
-    const quiz = document.getElementById('quiz');
-    const input = document.getElementById('username');
 
+    const socket = io();
+    let xAxis = 0;
+    let yAxis = 0;
+    const jingle = document.getElementById('jingle');
+    jingle.play();
     let onlineUsers = [];
 
+    window.ondeviceorientation = function (e) {
 
-    if (form) {
-        // On form submit
-        form.addEventListener('submit', function(e) {
-            console.log(input.value);
-            const query = input.value;
-            // Prevent default form functionality
-            e.preventDefault();
+        let alpha = Math.floor(e.alpha);
+        let beta = Math.floor(e.beta);
+        let gamma = Math.floor(e.gamma);
 
-            // Send event 'query' to server with input value
-            socket.emit('query', query);
-
-            // clear input field
-            input.value = "";
-            form.submit();
-            console.log(query)
-        });
-    }
+        const ball = document.getElementById('ball');
+        const deviceData = document.querySelector('.device-data');
+        deviceData.innerHTML = 'Alpha:' + alpha + ' Beta:' + beta + ' Gamma:' + gamma;
 
 
-    // On received event 'user connect' from server
-    socket.on('user connect', (name) => {
-        console.log('user connected!');
-        console.log(name);
-
-        form.style.display = 'none';
-        lobby.style.display = 'block';
-
-
-        // clear all HTML in the log
-        if (log) {
-            while (log.firstChild) {
-                log.removeChild(log.firstChild);
-            }
-            console.log('naam ' + name);
-
-            // Check if there are no users connected
-            if(name.length === 0) {
-                console.log('0 users connected');
-            }
-            // If users are still connected
-            else {
-                // For each user, add the user to log
-                name.forEach((item) => {
-                    // Add "'user' is connected" to log
-                    const list = document.createElement('li');
-                    list.innerText = item + ' is connected';
-                    log.appendChild(list);
-                });
+        if(gamma < 0) {
+            if(xAxis < 270) {
+                xAxis += 5;
             }
         }
-    });
+        else{
+            if(xAxis > 0) {
+                xAxis -= 5;
 
-    // On received event 'user disconnect' from server
-    socket.on('user disconnect', (user) => {
-        console.log(user);
-        console.log('user disconnected');
+            }
+        }
+        ball.style.marginLeft = xAxis + "px";
 
-        // clear all HTML in the log
-        if (log) {
-            while (log.firstChild) {
-                log.removeChild(log.firstChild);
+        if(beta < 0) {
+            if(yAxis < 370) {
+                yAxis += 5;
             }
 
-            // Check if there are no users connected
-            if(name.length === 0) {
-                console.log('0 users connected');
-            }
-            // If users are still connected
-            else {
-                // For each user, add the user to log
-                name.forEach((item) => {
-                    // Add "'user' is connected" to log
-                    const list = document.createElement('li');
-                    list.innerText = item + ' is connected';
-                    log.appendChild(list);
-                });
+        }
+        else {
+            if(yAxis > 0) {
+                yAxis -= 5;
+
             }
         }
 
-
-    });
-
-    socket.on('start quiz', (data) => {
-        // // Change URL to quiz
-        // if(window.location.href.indexOf('/quiz') > 0) {
-        //     console.log('quiz has started!')
-        // } else {
-        //     window.location.href = '/quiz';
-        // }
-
-        const question = document.getElementById('question');
-        const subTitle = document.getElementById('subtitle');
-        const answers = document.querySelector('.answers');
-        const log = document.querySelector('.log');
-        answers.style.display = 'block';
-        log.style.display = 'none';
-
-        question.innerText = '';
-        subTitle.innerText = '';
-        // answers.innerHTML = '';
-
-        initQuiz(data);
-        console.log('start quiz');
-    });
-
-    function initQuiz (data) {
-        console.log('initquiz is started');
-        console.log(data);
-        const question = document.getElementById('question');
-        const answerList = document.querySelector('.answers');
-
-        // const list1 = document.getElementById('list1');
-        // const list2 = document.getElementById('list2');
-        // const list3 = document.getElementById('list3');
-        // const list4 = document.getElementById('list4');
-
-        const list = document.querySelectorAll('listItem');
-
-        const listArr = [data[0].rightAnswer, data[0].incorrect3, data[0].incorrect2, data[0].incorrect1];
-
-        // const listArr = [
-        //     {
-        //         list: document.createElement('li'),
-        //         button1: document.createElement('input')
-        //     },
-        //     {
-        //         list: document.createElement('li'),
-        //         button2: document.createElement('input')
-        //     },
-        //     {
-        //         list3: document.createElement('li'),
-        //         button3: document.createElement('input')
-        //     },
-        //     {
-        //         list4: document.createElement('li'),
-        //         button4: document.createElement('input')
-        //     }];
-
-        question.innerText = data[0].question;
-        // list1.innerText = data[0].rightAnswer;
-        // list2.innerText = data[0].incorrect3;
-        // list3.innerText = data[0].incorrect2;
-        // list4.innerText = data[0].incorrect1;
-
-        const ranList = shuffle(listArr);
-
-        console.log(ranList);
-        console.log(list);
-
-        // list.forEach((item) => {
-        //     answerList.appendChild(item);
-        // })
-
-        for (let i = 0; i > list.length; i++) {
-            list[i].innerText = 'test';
-            console.log(list);
-            answerList.appendChild(list[i]);
+        ball.style.marginTop = yAxis + "px";
+        if (yAxis > 360) {
+            ball.style.backgroundColor = 'pink';
+            jingle.play();
+        }
+        else if (yAxis < 10) {
+            ball.style.backgroundColor = 'blue';
+            jingle.pause();
         }
 
-    }
 
-    function shuffle(array) {
-        var i = array.length,
-            j = 0,
-            temp;
-        while (i--) {
-            j = Math.floor(Math.random() * (i+1));
-            // swap randomly chosen element with current element
-            temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-        return array;
-    }
+
+    };
+
 
 
 })();
+
+
+
+// var bal = document.getElementById("bal")
+// var horizontaal = 0;
+// var verticaal = 0;
+//
+// window.ondeviceorientation = function rotatie(e){
+//     var a = Math.floor(e.alpha);
+//     var b = Math.floor(e.beta);
+//     var g = Math.floor(e.gamma);
+//     var tekst = "Alpha:"+ a + "<br>" + "Beta:" + b + "<br>" + "Gamma:" + g;
+//     bericht.innerHTML= tekst;
+//
+//     var alphaDiv = document.getElementById('alpha');
+//     var betaDiv = document.getElementById('beta');
+//     var gammaDiv = document.getElementById('gamma');
+//
+//
+//     if(g < 0){
+//         if(horizontaal < 300) {
+//             horizontaal = horizontaal + 5;
+//         }
+//     }
+//     else{
+//         if(horizontaal > 0) {
+//             horizontaal = horizontaal - 5;
+//
+//         }
+//     }
+//     bal.style.marginLeft = horizontaal + "px";
+//
+//     if(b < 0) {
+//         if(verticaal < 300) {
+//             verticaal = verticaal + 5;
+//         }
+//
+//     } else{
+//         if(verticaal > 0) {
+//             verticaal = verticaal - 5;
+//         }
+//
+//     }
+//
+//     bal.style.marginTop = verticaal + 'px';
+//     if(verticaal > 290) {
+//         bal.style.backgroundColor = 'pink';
+//     }
+//     else {
+//         if (verticaal < 10) {
+//             bal.style.backgroundColor = 'blue';
+//         }
+//     }
+// }
+//
 

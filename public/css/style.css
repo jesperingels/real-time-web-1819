@@ -1,12 +1,33 @@
-.answers {
-    display: none;
+* {
+    box-sizing: border-box;
 }
 
-#lobby {
-    display: none;
+html,
+body {
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
 }
 
-#quiz {
-    display: none;
+body {
+    display: grid;
+    grid-template-columns: 1fr 300px 1fr;
 }
 
+main {
+    border: 1px solid black;
+    grid-column: 2 / 3;
+    height: 400px;
+}
+
+#ball {
+    border-radius: 500px;
+    height: 30px;
+    width: 30px;
+    background-color: red;
+    position: absolute;
+}
+
+.device-data {
+    grid-column: 2 / 3;
+}
