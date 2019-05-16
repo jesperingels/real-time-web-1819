@@ -28,6 +28,14 @@ main {
     position: absolute;
 }
 
+#button {
+    grid-column: 2 / 3;
+}
+
 .device-data {
     grid-column: 2 / 3;
+}
+
+.hidden {
+    display: none;
 }

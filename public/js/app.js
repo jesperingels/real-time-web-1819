@@ -1,10 +1,10 @@
 (() => {
 
-    const socket = io();
+    // const socket = io();
     let xAxis = 0;
     let yAxis = 0;
     const jingle = document.getElementById('jingle');
-    jingle.play();
+    // jingle.play();
     let onlineUsers = [];
 
     window.ondeviceorientation = function (e) {
@@ -49,7 +49,7 @@
             ball.style.backgroundColor = 'pink';
             jingle.play();
         }
-        else if (yAxis < 10) {
+        else if (yAxis < 350) {
             ball.style.backgroundColor = 'blue';
             jingle.pause();
         }
@@ -57,7 +57,11 @@
 
 
     };
-
+    const button = document.getElementById('button');
+    button.addEventListener('click', () => {
+        jingle.play();
+        button.classList.add('hidden');
+    })
 
 
 })();
