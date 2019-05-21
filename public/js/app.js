@@ -1,6 +1,60 @@
 (() => {
 
-    // const socket = io();
+    const socket = io();
+    // const user = document.querySelectorAll('user');
+    const userWindow = document.getElementById('online-users');
+    const main = document.querySelector('main');
+    let onlineUsers = [];
+
+    socket.on('user connect', name => {
+
+        // on user connect clear online users and userWindow
+        onlineUsers.length = 0;
+        userWindow.innerHTML = '';
+
+        if(main) {
+
+            console.log(name);
+            console.log(onlineUsers);
+
+            name.forEach( user => {
+
+                onlineUsers.push(user);
+
+
+
+                const ball = document.createElement('div');
+                ball.setAttribute('id', 'ball');
+                main.appendChild(ball);
+            });
+
+            onlineUsers.forEach(onlineUser => {
+                const userName = document.createElement('div');
+                userName.innerText = onlineUser;
+                userWindow.appendChild(userName);
+            });
+
+
+
+        }
+    });
+
+    socket.on('user disconnect', stillOnlineUsers => {
+        onlineUsers.length = 0;
+        userWindow.innerHTML = '';
+
+        stillOnlineUsers.forEach(user => {
+            onlineUsers.push(user);
+        });
+
+        onlineUsers.forEach(onlineUser => {
+            const userName = document.createElement('div');
+            userName.innerText = onlineUser;
+            userWindow.appendChild(userName);
+        });
+    });
+
+    // play audio on device orientation
     let xAxis = 0;
     let yAxis = 0;
     const jingle = document.getElementById('jingle');
@@ -8,7 +62,7 @@
     const dance = document.getElementById('dance');
     const spoken = document.getElementById('spoken');
 
-    let onlineUsers = [];
+
 
     // On device rotation
     window.ondeviceorientation = function (e) {
@@ -18,8 +72,8 @@
         let gamma = Math.floor(e.gamma);
 
         const ball = document.getElementById('ball');
-        const deviceData = document.querySelector('.device-data');
-        deviceData.innerHTML = 'Alpha:' + alpha + ' Beta:' + beta + ' Gamma:' + gamma;
+        // const deviceData = document.querySelector('.device-data');
+        // deviceData.innerHTML = 'Alpha:' + alpha + ' Beta:' + beta + ' Gamma:' + gamma;
 
 
         if(gamma < 0) {
@@ -80,67 +134,18 @@
 
 
     };
-    const button = document.getElementById('button');
-    button.addEventListener('click', () => {
-        jingle.play();
-        button.classList.add('hidden');
-    })
+
+    if (document.getElementById('button')) {
+        const button = document.getElementById('button');
+        button.addEventListener('click', () => {
+            jingle.play();
+            button.classList.add('hidden');
+        })
+    }
+
 
 
 })();
 
 
-
-// var bal = document.getElementById("bal")
-// var horizontaal = 0;
-// var verticaal = 0;
-//
-// window.ondeviceorientation = function rotatie(e){
-//     var a = Math.floor(e.alpha);
-//     var b = Math.floor(e.beta);
-//     var g = Math.floor(e.gamma);
-//     var tekst = "Alpha:"+ a + "<br>" + "Beta:" + b + "<br>" + "Gamma:" + g;
-//     bericht.innerHTML= tekst;
-//
-//     var alphaDiv = document.getElementById('alpha');
-//     var betaDiv = document.getElementById('beta');
-//     var gammaDiv = document.getElementById('gamma');
-//
-//
-//     if(g < 0){
-//         if(horizontaal < 300) {
-//             horizontaal = horizontaal + 5;
-//         }
-//     }
-//     else{
-//         if(horizontaal > 0) {
-//             horizontaal = horizontaal - 5;
-//
-//         }
-//     }
-//     bal.style.marginLeft = horizontaal + "px";
-//
-//     if(b < 0) {
-//         if(verticaal < 300) {
-//             verticaal = verticaal + 5;
-//         }
-//
-//     } else{
-//         if(verticaal > 0) {
-//             verticaal = verticaal - 5;
-//         }
-//
-//     }
-//
-//     bal.style.marginTop = verticaal + 'px';
-//     if(verticaal > 290) {
-//         bal.style.backgroundColor = 'pink';
-//     }
-//     else {
-//         if (verticaal < 10) {
-//             bal.style.backgroundColor = 'blue';
-//         }
-//     }
-// }
-//
 
