@@ -4,9 +4,13 @@
     let xAxis = 0;
     let yAxis = 0;
     const jingle = document.getElementById('jingle');
-    // jingle.play();
+    const scat = document.getElementById('scat');
+    const dance = document.getElementById('dance');
+    const spoken = document.getElementById('spoken');
+
     let onlineUsers = [];
 
+    // On device rotation
     window.ondeviceorientation = function (e) {
 
         let alpha = Math.floor(e.alpha);
@@ -46,12 +50,31 @@
 
         ball.style.marginTop = yAxis + "px";
         if (yAxis > 360) {
-            ball.style.backgroundColor = 'pink';
             jingle.play();
         }
         else if (yAxis < 350) {
-            ball.style.backgroundColor = 'blue';
             jingle.pause();
+        }
+
+        if (yAxis < 10) {
+            scat.play();
+        }
+        else if (yAxis > 20) {
+            scat.pause();
+        }
+
+        if (xAxis > 260) {
+            dance.play();
+        }
+        else if (xAxis < 250) {
+            dance.pause();
+        }
+
+        if (xAxis < 10) {
+            spoken.play();
+        }
+        else if (xAxis > 20) {
+            spoken.pause();
         }
 
 
