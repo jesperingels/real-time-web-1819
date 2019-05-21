@@ -103,9 +103,9 @@
             socket.emit('Client yAxis', yAxis);
         }
 
-        socket.on('server yAxis', serverY =>{
-            ball.style.marginTop = serverY + "px";
-        });
+        // socket.on('server yAxis', serverY => {
+        //     ball.style.marginTop = serverY + "px";
+        // });
 
 
 

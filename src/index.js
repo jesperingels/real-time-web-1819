@@ -104,6 +104,7 @@ io.on('connection', socket => {
         }
 
         console.log(xAxis);
+
         console.log('gamma ' + gamma);
 
         io.emit('server xAxis', xAxis);
