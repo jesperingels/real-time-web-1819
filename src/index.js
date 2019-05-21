@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 
 app.post('/', function(req, res) {
 
+
     console.log('form sent');
 
     io.on('connection', socket => {
@@ -55,7 +56,61 @@ app.post('/', function(req, res) {
         });
     });
 
+
     res.render('pages/index.ejs');
+});
+
+io.on('connection', socket => {
+
+    let xAxis = 0;
+    let yAxis = 0;
+
+    // socket.on('Client xAxis', xAxis => {
+    //     console.log('xAxis ' + xAxis);
+    //     io.emit('server xAxis', xAxis);
+    // });
+    //
+    // socket.on('Client yAxis', yAxis => {
+    //     io.emit('server yAxis', yAxis);
+    // })
+
+    // socket.on('xLeft', () => {
+    //     console.log('xLeft');
+    //     if(xAxis < 270) {
+    //         xAxis += 5;
+    //     }
+    //
+    // });
+    //
+    // socket.on('xRight', () =>{
+    //     console.log('xRight');
+    //     if(xAxis > 0) {
+    //         xAxis -= 5;
+    //     }
+    //
+    // });
+
+    socket.on('gamma', gamma => {
+
+        if(gamma < 0) {
+            if(xAxis < 270) {
+                xAxis += 5;
+            }
+        }
+        else {
+            if(xAxis > 0) {
+                xAxis -= 5;
+            }
+        }
+
+        console.log(xAxis);
+        console.log('gamma ' + gamma);
+
+        io.emit('server xAxis', xAxis);
+
+    });
+
+
 });
 
 http.listen(port, () => console.log('App listening on port: ' + port ));

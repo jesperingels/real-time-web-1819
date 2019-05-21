@@ -54,6 +54,10 @@
         });
     });
 
+    socket.on('server beta', XY => {
+
+    });
+
     // play audio on device orientation
     let xAxis = 0;
     let yAxis = 0;
@@ -63,7 +67,6 @@
     const spoken = document.getElementById('spoken');
 
 
-
     // On device rotation
     window.ondeviceorientation = function (e) {
 
@@ -71,28 +74,25 @@
         let beta = Math.floor(e.beta);
         let gamma = Math.floor(e.gamma);
 
+        socket.emit('gamma', gamma);
+
         const ball = document.getElementById('ball');
-        // const deviceData = document.querySelector('.device-data');
-        // deviceData.innerHTML = 'Alpha:' + alpha + ' Beta:' + beta + ' Gamma:' + gamma;
 
 
-        if(gamma < 0) {
-            if(xAxis < 270) {
-                xAxis += 5;
-            }
-        }
-        else{
-            if(xAxis > 0) {
-                xAxis -= 5;
 
-            }
-        }
-        ball.style.marginLeft = xAxis + "px";
+        socket.on('server xAxis', serverX => {
+            // console.log(serverX);
+            // alert(serverX);
+            ball.style.marginLeft = serverX + "px";
+        });
+
 
         if(beta < 0) {
             if(yAxis < 370) {
                 yAxis += 5;
+
             }
+            socket.emit('Client yAxis', yAxis);
 
         }
         else {
@@ -100,9 +100,16 @@
                 yAxis -= 5;
 
             }
+            socket.emit('Client yAxis', yAxis);
         }
 
-        ball.style.marginTop = yAxis + "px";
+        socket.on('server yAxis', serverY =>{
+            ball.style.marginTop = serverY + "px";
+        });
+
+
+
+
         if (yAxis > 360) {
             jingle.play();
         }
