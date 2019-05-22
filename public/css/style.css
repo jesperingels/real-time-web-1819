@@ -20,12 +20,14 @@ main {
     height: 400px;
 }
 
-#ball {
+.ball {
     border-radius: 500px;
     height: 30px;
     width: 30px;
     background-color: red;
     position: absolute;
+    margin-left: 0;
+    transition: ease-in-out;
 }
 
 #button {

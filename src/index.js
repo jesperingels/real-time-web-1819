@@ -26,7 +26,6 @@ app.get('/', (req, res) => {
 
 app.post('/', function(req, res) {
 
-
     console.log('form sent');
 
     io.on('connection', socket => {
@@ -39,6 +38,9 @@ app.post('/', function(req, res) {
             onlineUsers.push(thisUser);
         }
         console.log('online users= ' + onlineUsers);
+
+        socket.emit('clientID', socket.id);
+
         io.emit("user connect", onlineUsers);
 
 
@@ -62,33 +64,15 @@ app.post('/', function(req, res) {
 
 io.on('connection', socket => {
 
+
+
+    // socket.on('storageId', Id => {
+    //     console.log(Id);
+    //     io.emit('server clientId', Id);
+    // });
+
     let xAxis = 0;
     let yAxis = 0;
-
-    // socket.on('Client xAxis', xAxis => {
-    //     console.log('xAxis ' + xAxis);
-    //     io.emit('server xAxis', xAxis);
-    // });
-    //
-    // socket.on('Client yAxis', yAxis => {
-    //     io.emit('server yAxis', yAxis);
-    // })
-
-    // socket.on('xLeft', () => {
-    //     console.log('xLeft');
-    //     if(xAxis < 270) {
-    //         xAxis += 5;
-    //     }
-    //
-    // });
-    //
-    // socket.on('xRight', () =>{
-    //     console.log('xRight');
-    //     if(xAxis > 0) {
-    //         xAxis -= 5;
-    //     }
-    //
-    // });
 
     socket.on('gamma', gamma => {
 
@@ -107,9 +91,56 @@ io.on('connection', socket => {
 
         console.log('gamma ' + gamma);
 
-        // io.emit('server xAxis', xAxis);
+        io.emit('server xAxis', xAxis);
 
     });
+
+    socket.on('beta', beta => {
+
+        if(beta < 0) {
+            if(yAxis < 370) {
+                yAxis += 5;
+            }
+        }
+        else {
+            if(yAxis > 0) {
+                yAxis -= 5;
+            }
+        }
+
+        io.emit('server yAxis', yAxis);
+
+    });
+
+
+    // Send music play or pause to client
+    if (yAxis > 360) {
+        io.emit('jingle play');
+    }
+    else if (yAxis < 350) {
+        io.emit('jingle pause');
+    }
+
+    if (yAxis < 10) {
+        io.emit('scat play');
+    }
+    else if (yAxis > 20) {
+        io.emit('scat pause');
+    }
+
+    if (xAxis > 260) {
+        io.emit('dance play');
+    }
+    else if (xAxis < 250) {
+        io.emit('dance pause');
+    }
+
+    if (xAxis < 10) {
+        io.emit('spoken play');
+    }
+    else if (xAxis > 20) {
+        io.emit('spoken pause');
+    }
 
 
 });
