@@ -5,13 +5,19 @@
 
 *This app only functions well on a smartphone!*
 
+## Install locally
+```
+npm i
+npm start
+```
+
 ## Concept 🧩
 In this app the user can move a ball around in a box by rotating their smartphone. When the ball touches any side of the 
 box, the app will play a musical loop. This app supports multiple users. When the user only touches the right and left side
 an API call is done to the [GIPHY API](https://developers.giphy.com/). The .gif file is set as a background for the app. 
 
 ## API
-The API call to the GIPHY API is executed on the server:
+The API call to the [GIPHY API](https://developers.giphy.com/) is executed on the server:
 ```javascript
      rp(api('eyes'))
            .then(res => {
@@ -37,14 +43,42 @@ const api = (msg) => {
 I used the npm package [request-promise](https://www.npmjs.com/package/request-promise) to make use of a promise on the server.
 The google chrome browser has recently added new safety features which require to add headers to this API call.
 
+It fetches 1 .gif url which is send to all connected clients.
+
 ## Data Life Cycle
 ![data life cycle](public/img/DatalifecycleRealTime.jpg)
+
+When the user enters his/her user-name the form POST's the user-name to the server. The user name gets pushed into an array.
+The server sends the username back to the client. On the client the received user also gets pushed into an array.
+
+So the server and each client now know which user-names are connected to the server.
+
+When the users' device is rotated, the client sends: the gamma-, beta orientation and username data to the server.
+```javascript
+window.ondeviceorientation = function (e) {
+        let localUserName = window.localStorage.getItem('username');
+
+        let beta = Math.floor(e.beta);
+        let gamma = Math.floor(e.gamma);
+
+        let position = {
+            beta: beta,
+            gamma: gamma
+        };
+
+        let userData = [localUserName, position];
+
+        socket.emit('userData', userData);
+}
+```
+On the server 
 
 ## Dependencies
 * Node.js
 * EJS
 * Express
 * Socket.io
+* bodyParser
 
 
 
