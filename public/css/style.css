@@ -8,6 +8,7 @@ body {
     height: 100%;
     margin: 0;
     background-color: aliceblue;
+    font-family: sans-serif;
 }
 
 body {
@@ -21,6 +22,10 @@ main {
     height: 400px;
     background-position: center;
     background-size: cover;
+}
+
+li {
+    list-style: none;
 }
 
 .ball {
@@ -49,4 +54,8 @@ main {
 
 .hidden {
     display: none;
+}
+
+#login {
+    grid-column: 1/3;
 }

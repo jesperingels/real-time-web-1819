@@ -29,12 +29,28 @@ app.post('/', function(req, res) {
 
     io.on('connection', socket => {
         let thisUser = req.body.user;
+        let userColor = req.body.color;
 
-        if(onlineUsers.includes(thisUser)) {
+        let user = {
+            name: thisUser,
+            color: userColor
+        };
+
+        if (onlineUsers.some(e => e.name === thisUser)) {
             console.log('user exists')
         } else {
-            onlineUsers.push(thisUser);
+            onlineUsers.push(user);
         }
+
+        // if(onlineUsers.name === thisUser) {
+        //     console.log('user exists')
+        // } else {
+        //     onlineUsers.push(user);
+        // }
+
+
+
+
         console.log('online users= ' + onlineUsers);
 
 
@@ -45,12 +61,46 @@ app.post('/', function(req, res) {
 
             console.log(thisUser + " disconnected " + 'because ' + reason);
 
+            onlineUsers = onlineUsers.filter(user => {
+                return user !== thisUser;
+            });
 
-            for( let i = 0; i < onlineUsers.length; i++){
-                if ( onlineUsers[i] === thisUser) {
-                    onlineUsers.splice(i, 1);
-                }
+            for (let i = 0; i < onlineUsers.length; i++) {
+                console.log('after filter ' + onlineUsers[i].name + onlineUsers[i].color);
             }
+
+            for( let i = 0; i < onlineUsers.length; i++) {
+                console.log('onlineUsers Array1 '+onlineUsers[i].name + onlineUsers[i].color);
+
+                // if ( onlineUsers[i].name === thisUser) {
+                //     onlineUsers.splice(i, 1);
+                // }
+
+                // if (onlineUsers.some(e => e.name === thisUser)) {
+                //     // console.log('user is present');
+                //     onlineUsers.splice( onlineUsers.indexOf(thisUser), 1 );
+                //
+                //     for (let i = 0; i < onlineUsers.length; i++) {
+                //         console.log('user after splice = '+onlineUsers[i].name);
+                //     }
+                //
+                // }
+
+                // const functie = () => {
+                //     if (onlineUsers.some(e => e.name === thisUser)) {
+                //         return true;
+                //     }
+                // };
+
+
+
+
+                // if(onlineUsers.length !== 0) {
+                //     console.log('onlineUsers Array2 '+onlineUsers[i].name + onlineUsers[i].color);
+                // }
+
+            }
+
 
             io.emit("user disconnect", onlineUsers);
         });

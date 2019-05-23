@@ -12,8 +12,10 @@
 <ul id="login">
     <li class="login page">
         <form class="form" action="/" method="post">
-            <label class="title"><h2>What's your nickname?</h2></label>
-            <input name="user" class="usernameInput" type="text" maxlength="14">
+            <label for="user" class="title"><h2>What's your nickname?</h2></label>
+            <input id="user" name="user" class="usernameInput" type="text" maxlength="14" required/>
+            <label for="color">What's your colour?</label>
+            <input id="color" name="color" type="color"/>
             <button type="submit">Submit</button>
         </form>
     </li>

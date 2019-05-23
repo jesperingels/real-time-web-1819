@@ -21,7 +21,7 @@
 
 
 
-    socket.on('user connect', name => {
+    socket.on('user connect', users => {
 
         if(main) {
 
@@ -34,11 +34,11 @@
                 main.removeChild(main.firstChild);
             }
 
-            console.log(name);
+            console.log(users);
             console.log(onlineUsers);
 
             // For each online user from server, push the user name to the client side array (onlineUsers)
-            name.forEach( user => {
+            users.forEach( user => {
                 onlineUsers.push(user);
                 console.log(user);
             });
@@ -47,12 +47,15 @@
             onlineUsers.forEach(onlineUser => {
 
                 const userName = document.createElement('div');
-                userName.innerText = onlineUser;
+                userName.innerText = onlineUser.name;
+                userName.style.color = onlineUser.color;
                 userWindow.appendChild(userName);
 
                 let ball = document.createElement('div');
                 ball.setAttribute('class', `ball`);
-                ball.setAttribute('id', `${onlineUser}`);
+                ball.setAttribute('id', `${onlineUser.name}`);
+                ball.style.backgroundColor = onlineUser.color;
+                ball.style.color = onlineUser.color;
                 main.appendChild(ball);
             });
 
@@ -86,7 +89,8 @@
                         pos = serverData[1],
                         ball = document.getElementById(`${user}`);
 
-                    ball.setAttribute('style',`transform: translate(${pos.xAxis}px,${pos.yAxis}px)`)
+                    // ball.setAttribute('style',`transform: translate(${pos.xAxis}px,${pos.yAxis}px)`);
+                    ball.style.transform = `translate(${pos.xAxis}px,${pos.yAxis}px)`;
 
                 });
 
@@ -156,8 +160,9 @@
         });
 
         onlineUsers.forEach(onlineUser => {
+            console.log(onlineUser.name);
             const userName = document.createElement('div');
-            userName.innerText = onlineUser;
+            userName.innerText = onlineUser.name;
             userWindow.appendChild(userName);
         });
     });
