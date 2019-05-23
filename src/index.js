@@ -29,7 +29,6 @@ app.post('/', function(req, res) {
 
     io.on('connection', socket => {
         let thisUser = req.body.user;
-        console.log('a user connected');
 
         if(onlineUsers.includes(thisUser)) {
             console.log('user exists')
@@ -156,12 +155,29 @@ io.on('connection', socket => {
             }
         }
 
-        if (yAxis < 10 || (xAxis > 260)) {
 
+        if(yAxis < 10) {
+            if(top !== 2) {
+                top += 1;
+            }
+        }
+
+        if (yAxis > 360) {
+            if (bottom !== 2) {
+                bottom += 1;
+            }
+        }
+
+        if(top === 2 && bottom === 2) {
+            callCats();
+            top = 0;
+            bottom = 0;
         }
 
         if(left === 2 && right === 2) {
             callEyes();
+            left = 0;
+            right = 0;
         }
 
     }, 500);
@@ -170,21 +186,39 @@ io.on('connection', socket => {
 
 
 
-   const callEyes = ()=>{
+   const callEyes = () => {
 
        rp(api('eyes'))
            .then(res => {
                const info = JSON.parse(res);
                const gif = info.data.map(el => el.images);
                console.log(gif[0].downsized.url);
-               io.emit('giphy init', gif[0].downsized.url)
+               io.emit('giphy eyes init', gif[0].downsized.url)
            })
            .catch(function (err) {
                console.log(err);
            });
-       clearInterval(checkPosition);
+       // clearInterval(checkPosition);
 
    };
+
+    const callCats = () => {
+
+        rp(api('cats up and down'))
+            .then(res => {
+                const info = JSON.parse(res);
+                const gif = info.data.map(el => el.images);
+                console.log(gif[0].downsized.url);
+                io.emit('giphy cats init', gif[0].downsized.url)
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+        // clearInterval(checkPosition);
+
+    };
+
+
 
 
 

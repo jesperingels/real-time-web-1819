@@ -7,6 +7,7 @@ body {
     min-height: 100%;
     height: 100%;
     margin: 0;
+    background-color: aliceblue;
 }
 
 body {
@@ -18,6 +19,8 @@ main {
     border: 1px solid black;
     grid-column: 2 / 3;
     height: 400px;
+    background-position: center;
+    background-size: cover;
 }
 
 .ball {
@@ -32,9 +35,15 @@ main {
 
 #button {
     grid-column: 2 / 3;
+    background: #ffa047;
+    border-radius: 500px;
+    color: white;
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
-.online-users {
+#online-users, h3 {
     grid-column: 2 / 3;
 }
 

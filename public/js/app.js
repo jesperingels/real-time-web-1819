@@ -1,7 +1,6 @@
 (() => {
 
     const socket = io();
-    // const user = document.querySelectorAll('user');
     const userWindow = document.getElementById('online-users');
     const main = document.querySelector('main');
     let onlineUsers = [];
@@ -47,8 +46,6 @@
             // For each online user in the client side array (onlineUsers)
             onlineUsers.forEach(onlineUser => {
 
-                // const clientId = window.localStorage.getItem(`clientId`);
-
                 const userName = document.createElement('div');
                 userName.innerText = onlineUser;
                 userWindow.appendChild(userName);
@@ -89,7 +86,7 @@
                         pos = serverData[1],
                         ball = document.getElementById(`${user}`);
 
-                    ball.setAttribute("style",`transform: translate(${pos.xAxis}px,${pos.yAxis}px)`)
+                    ball.setAttribute('style',`transform: translate(${pos.xAxis}px,${pos.yAxis}px)`)
 
                 });
 
@@ -137,8 +134,13 @@
         }
     });
 
-    socket.on('giphy init', gif => {
-        console.log(gif);
+    socket.on('giphy eyes init', gif => {
+        // console.log(gif);
+        main.style.backgroundImage = `url('${gif}')`;
+    });
+
+    socket.on('giphy cats init', gif => {
+        // console.log(gif);
         main.style.backgroundImage = `url('${gif}')`;
     });
 
@@ -159,9 +161,6 @@
             userWindow.appendChild(userName);
         });
     });
-
-
-
 
 })();
 
