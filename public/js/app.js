@@ -6,7 +6,20 @@
     const main = document.querySelector('main');
     let onlineUsers = [];
 
-    window.localStorage.clear();
+    if(document.querySelector('form')) {
+        window.localStorage.clear();
+        const form = document.querySelector('form');
+        const input = document.querySelector('.usernameInput');
+        form.addEventListener('submit', () => {
+            let username = window.localStorage.getItem(`username`);
+
+            if(!username) {
+                window.localStorage.setItem(`username`, input.value);
+            }
+        })
+    }
+
+
 
     socket.on('user connect', name => {
 
@@ -33,18 +46,17 @@
             // For each online user in the client side array (onlineUsers)
             onlineUsers.forEach(onlineUser => {
 
-                const clientId = window.localStorage.getItem(`clientId`);
-                
+                // const clientId = window.localStorage.getItem(`clientId`);
+
                 const userName = document.createElement('div');
                 userName.innerText = onlineUser;
                 userWindow.appendChild(userName);
 
                 let ball = document.createElement('div');
-                ball.setAttribute('class', `ball ${clientId}`);
+                ball.setAttribute('class', `ball`);
+                ball.setAttribute('id', `${onlineUser}`);
                 main.appendChild(ball);
             });
-
-
 
 
             // play audio on device orientation
@@ -56,28 +68,31 @@
 
             // On device rotation
             window.ondeviceorientation = function (e) {
+                let localUserName = window.localStorage.getItem('username');
 
                 let beta = Math.floor(e.beta);
                 let gamma = Math.floor(e.gamma);
 
-                socket.emit('gamma', gamma);
-                socket.emit('beta', beta);
+                let position = {
+                    beta: beta,
+                    gamma: gamma
+                };
 
-                // Select 'connected users' created div
-                let ball = document.querySelector('.ball');
+                let userData = [localUserName, position];
+
+                socket.emit('userData', userData);
 
 
-                socket.on('server xAxis', serverX => {
-                    console.log('serverX'+serverX);
-                    document.getElementById('console').innerText = serverX;
-                    ball.style.marginLeft = `${serverX}px`;
+                socket.on('serverData', serverData => {
+                    let user = serverData[0],
+                        pos = serverData[1],
+                        ball = document.getElementById(`${user}`);
+
+                    ball.setAttribute("style",`transform: translate(${pos.xAxis}px,${pos.yAxis}px)`)
+
                 });
 
-                socket.on('server yAxis', serverY => {
-                    console.log('serverY'+serverY);
-                    ball.style.marginTop = `${serverY}px`;
 
-                });
 
                 socket.on('jingle play', () => {
                     jingle.play();
@@ -121,13 +136,6 @@
         }
     });
 
-    socket.on('clientID', Id => {
-        let clientId = window.localStorage.getItem(`clientId`);
-
-        if(!clientId) {
-            window.localStorage.setItem(`clientId`, Id);
-        }
-    });
 
     // Delete disconnected user from onlineUsers array
     socket.on('user disconnect', stillOnlineUsers => {

@@ -19,6 +19,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 let onlineUsers = [];
 
+
+
 app.get('/', (req, res) => {
     res.render('pages/login.ejs');
 });
@@ -39,7 +41,6 @@ app.post('/', function(req, res) {
         }
         console.log('online users= ' + onlineUsers);
 
-        socket.emit('clientID', socket.id);
 
         io.emit("user connect", onlineUsers);
 
@@ -47,6 +48,7 @@ app.post('/', function(req, res) {
         socket.on("disconnect",reason => {
 
             console.log(thisUser + " disconnected " + 'because ' + reason);
+
 
             for( let i = 0; i < onlineUsers.length; i++){
                 if ( onlineUsers[i] === thisUser) {
@@ -65,18 +67,12 @@ app.post('/', function(req, res) {
 io.on('connection', socket => {
 
 
-
-    // socket.on('storageId', Id => {
-    //     console.log(Id);
-    //     io.emit('server clientId', Id);
-    // });
-
     let xAxis = 0;
     let yAxis = 0;
 
-    socket.on('gamma', gamma => {
 
-        if(gamma < 0) {
+    socket.on('userData', userData => {
+        if(userData[1].gamma < 0) {
             if(xAxis < 270) {
                 xAxis += 5;
             }
@@ -87,17 +83,7 @@ io.on('connection', socket => {
             }
         }
 
-        console.log(xAxis);
-
-        console.log('gamma ' + gamma);
-
-        io.emit('server xAxis', xAxis);
-
-    });
-
-    socket.on('beta', beta => {
-
-        if(beta < 0) {
+        if(userData[1].beta < 0) {
             if(yAxis < 370) {
                 yAxis += 5;
             }
@@ -108,7 +94,14 @@ io.on('connection', socket => {
             }
         }
 
-        io.emit('server yAxis', yAxis);
+        let position = {
+            "xAxis": xAxis,
+            "yAxis": yAxis
+        };
+
+        let serverData = [userData[0], position];
+
+        io.emit('serverData', serverData);
 
     });
 
