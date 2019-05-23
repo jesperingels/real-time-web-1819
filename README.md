@@ -5,7 +5,7 @@
 
 *This app only functions well on a smartphone!*
 
-## Install locally
+## Install locally 👨‍💻
 ```
 npm i
 npm start
@@ -16,7 +16,7 @@ In this app the user can move a ball around in a box by rotating their smartphon
 box, the app will play a musical loop. This app supports multiple users. When the user only touches the right and left side
 an API call is done to the [GIPHY API](https://developers.giphy.com/). The .gif file is set as a background for the app. 
 
-## API
+## API 📬
 The API call to the [GIPHY API](https://developers.giphy.com/) is executed on the server:
 ```javascript
      rp(api('eyes'))
@@ -71,7 +71,25 @@ window.ondeviceorientation = function (e) {
         socket.emit('userData', userData);
 }
 ```
-On the server 
+On the server a number for the xAxis and yAxis is increased or decreased depending on the device orientation. Example:
+```javascript
+let xAxis = 0;
+let yAxis = 0;
+
+socket.on('userData', userData => {
+    if(userData[1].gamma < 0) {
+        if(xAxis < 270) {
+            xAxis += 5;
+        }
+    }
+    else {
+        if(xAxis > 0) {
+            xAxis -= 5;
+        }
+    }
+});
+        
+```
 
 ## Dependencies
 * Node.js
