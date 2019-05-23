@@ -45,7 +45,7 @@ The google chrome browser has recently added new safety features which require t
 
 It fetches 1 .gif url which is send to all connected clients.
 
-## Data Life Cycle
+## Data Life Cycle ♽
 ![data life cycle](public/img/DatalifecycleRealTime.jpg)
 
 When the user enters his/her user-name the form POST's the user-name to the server. The user name gets pushed into an array.
@@ -101,7 +101,7 @@ Meanwhile on the server an interval function is monitoring if the ball has hit t
 is performed and the data is sent to the clients.
 
 
-## Dependencies
+## Dependencies 📦
 * Node.js
 * EJS
 * Express
