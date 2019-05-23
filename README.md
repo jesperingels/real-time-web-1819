@@ -108,6 +108,10 @@ is performed and the data is sent to the clients.
 * Socket.io
 * bodyParser
 
+## Wishlist
+* More API interactions
+
+
 
 
 
