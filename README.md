@@ -38,7 +38,7 @@ I used the npm package [request-promise](https://www.npmjs.com/package/request-p
 The google chrome browser has recently added new safety features which require to add headers to this API call.
 
 ## Data Life Cycle
-![data life cycle](public/img/DataLifeCycleRealTime.jpg)
+![data life cycle](public/img/DatalifecycleRealTime.jpg)
 
 ## Dependencies
 * Node.js
