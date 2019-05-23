@@ -5,7 +5,6 @@ const rp = require('request-promise');
 const http = require('http').Server(app);
 require('request');
 const io = require('socket.io')(http);
-// const randomInt = require('random-int');
 const port = process.env.PORT || 3008;
 const bodyParser = require('body-parser');
 

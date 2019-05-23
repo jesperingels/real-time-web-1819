@@ -71,7 +71,7 @@ window.ondeviceorientation = function (e) {
         socket.emit('userData', userData);
 }
 ```
-On the server a number for the xAxis and yAxis is increased or decreased depending on the device orientation. Example:
+On the server a number for the xAxis and yAxis is increased or decreased depending on the device orientation. **Example:**
 ```javascript
 let xAxis = 0;
 let yAxis = 0;
@@ -87,9 +87,19 @@ socket.on('userData', userData => {
             xAxis -= 5;
         }
     }
+    
+    //...
+    
+    io.emit('serverData', serverData);
 });
         
 ```
+
+The username with the xAxis and yAxis is send back to each client. So the client can move each user's ball.
+
+Meanwhile on the server an interval function is monitoring if the ball has hit the left and right wall. If so, an API call
+is performed and the data is sent to the clients.
+
 
 ## Dependencies
 * Node.js
