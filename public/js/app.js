@@ -136,6 +136,11 @@
         }
     });
 
+    socket.on('giphy init', gif => {
+        console.log(gif);
+        main.style.backgroundImage = `url('${gif}')`;
+    });
+
 
     // Delete disconnected user from onlineUsers array
     socket.on('user disconnect', stillOnlineUsers => {
@@ -153,6 +158,8 @@
             userWindow.appendChild(userName);
         });
     });
+
+
 
 
 })();

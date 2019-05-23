@@ -3,9 +3,9 @@ require('ejs');
 const app = express();
 const rp = require('request-promise');
 const http = require('http').Server(app);
-const request = require('request');
+require('request');
 const io = require('socket.io')(http);
-const randomInt = require('random-int');
+// const randomInt = require('random-int');
 const port = process.env.PORT || 3008;
 const bodyParser = require('body-parser');
 
@@ -18,8 +18,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 let onlineUsers = [];
-
-
 
 app.get('/', (req, res) => {
     res.render('pages/login.ejs');
@@ -103,40 +101,109 @@ io.on('connection', socket => {
 
         io.emit('serverData', serverData);
 
+
+        // Send music play or pause to client
+        if (yAxis > 360) {
+            io.emit('jingle play');
+        }
+        else if (yAxis < 350) {
+            io.emit('jingle pause');
+        }
+
+        if (yAxis < 10) {
+            io.emit('scat play');
+        }
+        else if (yAxis > 20) {
+            io.emit('scat pause');
+        }
+
+        if (xAxis > 260) {
+            io.emit('dance play');
+        }
+        else if (xAxis < 250) {
+            io.emit('dance pause');
+        }
+
+        if (xAxis < 10) {
+            io.emit('spoken play');
+        }
+        else if (xAxis > 20) {
+            io.emit('spoken pause');
+        }
+
+
+
     });
 
 
-    // Send music play or pause to client
-    if (yAxis > 360) {
-        io.emit('jingle play');
-    }
-    else if (yAxis < 350) {
-        io.emit('jingle pause');
-    }
 
-    if (yAxis < 10) {
-        io.emit('scat play');
-    }
-    else if (yAxis > 20) {
-        io.emit('scat pause');
-    }
+    // Background functionality
+    let top = 0,
+        right = 0,
+        bottom = 0,
+        left = 0;
 
-    if (xAxis > 260) {
-        io.emit('dance play');
-    }
-    else if (xAxis < 250) {
-        io.emit('dance pause');
-    }
 
-    if (xAxis < 10) {
-        io.emit('spoken play');
-    }
-    else if (xAxis > 20) {
-        io.emit('spoken pause');
-    }
+    const checkPosition = setInterval(() => {
+        if (xAxis < 10) {
+            if(left !== 2) {
+                left += 1;
+            }
+        }
+
+        if (xAxis > 260) {
+            if(right !== 2) {
+                right += 1;
+            }
+        }
+
+        if (yAxis < 10 || (xAxis > 260)) {
+
+        }
+
+        if(left === 2 && right === 2) {
+            callEyes();
+        }
+
+    }, 500);
+
+
+
+
+
+   const callEyes = ()=>{
+
+       rp(api('eyes'))
+           .then(res => {
+               const info = JSON.parse(res);
+               const gif = info.data.map(el => el.images);
+               console.log(gif[0].downsized.url);
+               io.emit('giphy init', gif[0].downsized.url)
+           })
+           .catch(function (err) {
+               console.log(err);
+           });
+       clearInterval(checkPosition);
+
+   };
+
+
+
+
 
 
 });
+
+const api = (msg) => {
+    return {
+        url:`https://api.giphy.com/v1/gifs/search?q=${msg}&api_key=oz5yAcu5riJVWeOkoR1FAiFegepGemHX&limit=1`,
+        headers: {
+            'User-Agent': 'request',
+            'Content-Type': 'text/html'
+        }
+    }};
+
+
 
 http.listen(port, () => console.log('App listening on port: ' + port ));
 
