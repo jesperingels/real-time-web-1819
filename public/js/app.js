@@ -10,6 +10,7 @@
         window.localStorage.clear();
         const form = document.querySelector('form');
         const input = document.querySelector('.usernameInput');
+
         form.addEventListener('submit', () => {
             let username = window.localStorage.getItem(`username`);
 

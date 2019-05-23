@@ -1,115 +1,51 @@
 # Real-Time Web @cmda-minor-web · 2018-2019
 
-## Concept
-**De slimste stad van Nederland:** Meerdere mensen verbinden met de webapp. Hun locatie wordt in een overzicht getoond.
-Bijvoorbeeld: Amsterdam, Utrecht, Rotterdam. De mensen uit deze drie steden gaan enkele quizvragen beantwoorden en kunnen 
-zien wie de slimste stad van Nederland is. De muispositie van elke client wordt real-time op de server opgeslagen
-ook de locatie van de client wordt op de server real-time opgeslagen. Degene die als eerste op het juiste antwoord klikt 
-heeft gewonnen en scoort een punt voor zijn/haar stad. De vragen worden opgehaald uit een API die ik zelf aanmaak in Express.js
+## Musical Rotation 🎼
+[Demo](https://real-time-jesperingels.herokuapp.com/)
+
+*This app only functions well on a smartphone!*
+
+## Concept 🧩
+In this app the user can move a ball around in a box by rotating their smartphone. When the ball touches any side of the 
+box, the app will play a musical loop. This app supports multiple users. When the user only touches the right and left side
+an API call is done to the [GIPHY API](https://developers.giphy.com/). The .gif file is set as a background for the app. 
 
 ## API
-Zo is de data opgeslagen in mijn `db.js` file:
+The API call to the GIPHY API is executed on the server:
 ```javascript
-quiz = [
-    {
-        question: 'Op de albumhoes van welk album van de Red Hot Chili Peppers zit een meisje achter de piano?',
-        rightAnswer: 'One Hot Minute',
-        incorrect1: 'Blood Suger Sex Magic',
-        incorrect2: 'Californication',
-        incorrect3: 'Mother\'s Milk'
-    },
+     rp(api('eyes'))
+           .then(res => {
+               const info = JSON.parse(res);
+               const gif = info.data.map(el => el.images);
+               console.log(gif[0].downsized.url);
+               io.emit('giphy init', gif[0].downsized.url)
+           })
+           .catch(function (err) {
+               console.log(err);
+           });
 
-    {
-        question: 'Welke stad ligt het meest noordelijk?',
-        rightAnswer: 'Frankfurt',
-        incorrect1: 'Stuttgart',
-        incorrect2: 'München',
-        incorrect3: 'Wenen'
-    },
-
-    {
-        question: 'Hoe vaak won Michael Schumacher vanaf 2000 achter elkaar het WK Formule 1?',
-        rightAnswer: '5 keer',
-        incorrect1: '6 keer',
-        incorrect2: '4 keer',
-        incorrect3: '3 keer'
-    },
-
-    {
-        question: 'Welke club werd kampioen van de eredivisie in het seizoen 2008/2009?',
-        rightAnswer: 'AZ',
-        incorrect1: 'PSV',
-        incorrect2: 'De Graafschap',
-        incorrect3: 'FC Twente'
-    },
-
-    {
-        question: 'Wie was president van Amerika tijdens de Eerste Wereldoorlog?',
-        rightAnswer: 'Wilson',
-        incorrect1: 'Harding',
-        incorrect2: 'Roosevelt',
-        incorrect3: 'Taft',
-    },
-
-    {
-        question: 'In welke film komt een computerexpert erachter dat de wereld waarin hij leeft niet echt is?',
-        rightAnswer: 'The Matrix',
-        incorrect1: 'Transformers',
-        incorrect2: 'V for Vandetta',
-        incorrect3: 'Aeon Flux'
-    },
-
-    {
-        question: 'Wat is de titel van het debuutalbum van Coldplay?',
-        rightAnswer: 'Parachutes',
-        incorrect1: 'A rush of blood to the head',
-        incorrect2: 'X&Y',
-        incorrect3: 'Hot Fuss'
-    },
-
-    {
-        question: 'Wanneer was de franse revolutie?',
-        rightAnswer: '1789-1815',
-        incorrect1: '1815-1821',
-        incorrect2: '1889-1901',
-        incorrect3: '1600-1612'
-    },
-
-    {
-        question: 'Waar ligt de Nubische woestijn?',
-        rightAnswer: 'Egypte',
-        incorrect1: 'Turkmenistan',
-        incorrect2: 'Irak',
-        incorrect3: 'Namibië'
-    },
-
-    {
-        question: 'Wanneer waren de olympische spelen in Sydney?',
-        rightAnswer: '2000',
-        incorrect1: '2002',
-        incorrect2: '1960',
-        incorrect3: '1964'
-    }
-];
-
-module.exports = quiz;
+const api = (msg) => {
+    return {
+        url:`https://api.giphy.com/v1/gifs/search?q=${msg}&api_key=oz5yAcu5riJVWeOkoR1FAiFegepGemHX&limit=1`,
+        headers: {
+            'User-Agent': 'request',
+            'Content-Type': 'text/html'
+        }
+    }};
 ```
 
-in mijn index.js komt de database binnen en toon ik de data bij een get request met de url: `/api/v1/quiz`:
-```javascript
-const db = require('../public/db.js');
+I used the npm package [request-promise](https://www.npmjs.com/package/request-promise) to make use of a promise on the server.
+The google chrome browser has recently added new safety features which require to add headers to this API call.
 
-app.get('/api/v1/quiz', (req, res) => {
-    res.status(200).send({
-        db: db
-    })
-});
-```
 ## Data Life Cycle
-![data life cycle](public/img/DataLifeCycle.jpg)
+![data life cycle](public/img/DataLifeCycleRealTime.jpg)
 
-## Interaction Diagram
-![interaction diagram](public/img/interactionDiagram.jpg)
+## Dependencies
+* Node.js
+* EJS
+* Express
+* Socket.io
+
 
 
 
