@@ -42,14 +42,6 @@ app.post('/', function(req, res) {
             onlineUsers.push(user);
         }
 
-        // if(onlineUsers.name === thisUser) {
-        //     console.log('user exists')
-        // } else {
-        //     onlineUsers.push(user);
-        // }
-
-
-
 
         console.log('online users= ' + onlineUsers);
 
@@ -71,33 +63,6 @@ app.post('/', function(req, res) {
 
             for( let i = 0; i < onlineUsers.length; i++) {
                 console.log('onlineUsers Array1 '+onlineUsers[i].name + onlineUsers[i].color);
-
-                // if ( onlineUsers[i].name === thisUser) {
-                //     onlineUsers.splice(i, 1);
-                // }
-
-                // if (onlineUsers.some(e => e.name === thisUser)) {
-                //     // console.log('user is present');
-                //     onlineUsers.splice( onlineUsers.indexOf(thisUser), 1 );
-                //
-                //     for (let i = 0; i < onlineUsers.length; i++) {
-                //         console.log('user after splice = '+onlineUsers[i].name);
-                //     }
-                //
-                // }
-
-                // const functie = () => {
-                //     if (onlineUsers.some(e => e.name === thisUser)) {
-                //         return true;
-                //     }
-                // };
-
-
-
-
-                // if(onlineUsers.length !== 0) {
-                //     console.log('onlineUsers Array2 '+onlineUsers[i].name + onlineUsers[i].color);
-                // }
 
             }
 
@@ -248,7 +213,6 @@ io.on('connection', socket => {
            .catch(function (err) {
                console.log(err);
            });
-       // clearInterval(checkPosition);
 
    };
 
@@ -264,7 +228,6 @@ io.on('connection', socket => {
             .catch(function (err) {
                 console.log(err);
             });
-        // clearInterval(checkPosition);
 
     };
 
